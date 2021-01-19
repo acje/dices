@@ -3,7 +3,7 @@ Rolling dices and counting them
 
 RUSTFLAGS="-C target-cpu=native" cargo run --release
 
-result:
+Result, using i7-7500U:
 
 [src/main.rs:23] imp_dice_count(&dices) = Cnt {
     ones: 33337373,
@@ -45,4 +45,4 @@ fours: 33332531
 fives: 33327318
 sixs: 33329074
 
-multiscan fun count 227.2ms
+multiscan fun count 227.2ms (somewhat supprising, probably some SIMD going on)
