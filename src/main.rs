@@ -10,38 +10,38 @@ struct Cnt {
     fives: u32,
     sixs: u32,
 }
-enum Dices {
-    ones,
-    twos,
-    threes,
-    fours,
-    fives,
-    sixs,
-    errors,
-}
 
 fn main() {
     // Roll some D6 dices
     let mut rng = rand::thread_rng();
-    let dices: Vec<u8> = (0..20_000_000)
+    let dices: Vec<u8> = (0..200_000_000)
         .map(|_| Uniform::from(1..=6).sample(&mut rng))
         .collect();
 
-    // imperative dice count
+    // Imperative dice count
     let time = Instant::now();
     dbg!(imp_dice_count(&dices));
     println!("imp_dice_count {:.1?}", time.elapsed());
 
-    // functional dice count
+    // Functional dice count
     let time = Instant::now();
     dbg!(fun_dice_count(&dices));
     println!("fun_dice_count {:.1?}", time.elapsed());
 
-    // TODO Parallell functional dice count
+    // Parallell functional dice count. Embarrassing code to solve embarrassing parallel problem.
     let time = Instant::now();
     dbg!(par_fun_dice_count(&dices));
     println!("par_fun_dice_count {:.1?}", time.elapsed());
 
+    // Multiple scans. Probably uses SIMD?
+    let time = Instant::now();
+    println!("ones: {}", dices.iter().filter(|&x| *x == 1).count());
+    println!("twos: {}", dices.iter().filter(|&x| *x == 2).count());
+    println!("threes: {}", dices.iter().filter(|&x| *x == 3).count());
+    println!("fours: {}", dices.iter().filter(|&x| *x == 4).count());
+    println!("fives: {}", dices.iter().filter(|&x| *x == 5).count());
+    println!("sixs: {}", dices.iter().filter(|&x| *x == 6).count());
+    println!("multiscan fun count {:.1?}", time.elapsed());
 }
 
 fn imp_dice_count(dices: &[u8]) -> Cnt {
