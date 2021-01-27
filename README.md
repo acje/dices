@@ -45,7 +45,7 @@ fours: 16668728
 fives: 16667327
 sixs: 16669652
 
-multiscan fun count 80.0ms
+multiscan fun count 80.0ms (6 scans, functional def, probably using SIMD)
 
 bytecount ones:16668221
 bytecount twos:16665583
