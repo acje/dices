@@ -1,16 +1,16 @@
 use rand::distributions::{Distribution, Uniform};
 use rayon::prelude::*;
-use std::{default, sync::Arc};
+use std::sync::Arc;
 use std::thread;
 use std::time::Instant;
 #[derive(Debug, Default, Clone)]
 struct Cnt {
-    ones: u32,
-    twos: u32,
-    threes: u32,
-    fours: u32,
-    fives: u32,
-    sixs: u32,
+    ones: usize,
+    twos: usize,
+    threes: usize,
+    fours: usize,
+    fives: usize,
+    sixs: usize,
 }
 
 fn main() {
@@ -57,24 +57,32 @@ fn main() {
 
     // OS threaded Bytecount crate
     let time = Instant::now();
-    let dices_p = Arc::new(dices);
-    let mut cnt = Arc::new(Cnt::default());
-    let mut cnt_cloned = cnt.clone();
-    let dices_p_cloned = dices_p.clone();
-    println!("bytecount arc test {}:{}", 1, bytecount::count(&dices_p_cloned, 1u8));
-    /*
-    for n in 1..7u8 {
-        println!("Starting thread:{}",n);
-        let dices_p = dices_p.clone();
-        thread::spawn(move || {
-            println!("Hello from OS thread");
-            //println!("bytecount {}:{}", n, bytecount::count(&dices_p_cloned, n));
-            cnt_cloned.ones = bytecount::count(&dices_p, 1u8) as u32;
-        });
-        
-    }
-    println!("bytecount {:.1?}", time.elapsed());
-*/
+    let dices = Arc::new(dices);
+
+    let dices_p = dices.clone();
+    let ones = thread::spawn(move || bytecount::count(&dices_p, 1u8));
+    let dices_p = dices.clone();
+    let twos = thread::spawn(move || bytecount::count(&dices_p, 2u8));
+    let dices_p = dices.clone();
+    let threes = thread::spawn(move || bytecount::count(&dices_p, 3u8));
+    let dices_p = dices.clone();
+    let fours = thread::spawn(move || bytecount::count(&dices_p, 4u8));
+    let dices_p = dices.clone();
+    let fives = thread::spawn(move || bytecount::count(&dices_p, 5u8));
+    let dices_p = dices.clone();
+    let sixs = thread::spawn(move || bytecount::count(&dices_p, 6u8));
+
+    let cnt = Cnt {
+        ones: ones.join().unwrap(),
+        twos: twos.join().unwrap(),
+        threes: threes.join().unwrap(),
+        fours: fours.join().unwrap(),
+        fives: fives.join().unwrap(),
+        sixs: sixs.join().unwrap(),
+    };
+
+    println!("Threaded:{:?}", cnt);
+    println!("Threaded bytecount {:.1?}", time.elapsed());
 }
 
 fn imp_dice_count(dices: &[u8]) -> Cnt {
