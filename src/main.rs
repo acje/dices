@@ -21,66 +21,33 @@ fn main() {
     // Imperative dice count
     let time = Instant::now();
     dbg!(imp_dice_count(&dices));
-    println!("imp_dice_count {:.1?}", time.elapsed());
+    println!("Single pass serial imp_dice_count {:.1?}", time.elapsed());
 
-    // Functional dice count
+    // Single pass functional dice count
     let time = Instant::now();
     dbg!(fun_dice_count(&dices));
-    println!("fun_dice_count {:.1?}", time.elapsed());
+    println!("Single pass serial fun_dice_count {:.1?}", time.elapsed());
 
-    // Parallell functional dice count. Embarrassing code to solve embarrassing parallel problem.
+    // Parallell/rayon functional dice count. Embarrassing code to solve embarrassing parallel problem.
     let time = Instant::now();
     dbg!(par_fun_dice_count(&dices));
-    println!("par_fun_dice_count {:.1?}", time.elapsed());
+    println!("Rayon single pass parallell par_fun_dice_count {:.1?}", time.elapsed());
 
     // Multiple scans. Probably uses SIMD?
     let time = Instant::now();
-    println!("ones: {}", dices.iter().filter(|&x| *x == 1).count());
-    println!("twos: {}", dices.iter().filter(|&x| *x == 2).count());
-    println!("threes: {}", dices.iter().filter(|&x| *x == 3).count());
-    println!("fours: {}", dices.iter().filter(|&x| *x == 4).count());
-    println!("fives: {}", dices.iter().filter(|&x| *x == 5).count());
-    println!("sixs: {}", dices.iter().filter(|&x| *x == 6).count());
-    println!("multiscan fun count {:.1?}", time.elapsed());
+    dbg!(multi_fun_dice_count(&dices));
+    println!("6 scanns serial /w SIMD? multi_fun_dice_count {:.1?}", time.elapsed());
 
     // Bytecount crate
     let time = Instant::now();
-    println!("bytecount ones:{}", bytecount::count(&dices, 1u8));
-    println!("bytecount twos:{}", bytecount::count(&dices, 2u8));
-    println!("bytecount threes:{}", bytecount::count(&dices, 3u8));
-    println!("bytecount fours:{}", bytecount::count(&dices, 4u8));
-    println!("bytecount fives:{}", bytecount::count(&dices, 5u8));
-    println!("bytecount sixs:{}", bytecount::count(&dices, 6u8));
-    println!("bytecount {:.1?}", time.elapsed());
+    dbg!(dice_bytecount(&dices));
+    println!("6 scans serial dice_bytecount {:.1?}", time.elapsed());
 
     // OS threaded Bytecount crate
     let time = Instant::now();
     let dices = Arc::new(dices);
     dbg!(threaded_dice_bytecount(&dices));
-    println!("threaded_dice_bytecount {:.1?}", time.elapsed());
-}
-
-fn threaded_dice_bytecount(dices: &Arc<Vec<u8>>) -> Cnt {
-    let dices_p = dices.clone();
-    let ones = thread::spawn(move || bytecount::count(&dices_p, 1u8));
-    let dices_p = dices.clone();
-    let twos = thread::spawn(move || bytecount::count(&dices_p, 2u8));
-    let dices_p = dices.clone();
-    let threes = thread::spawn(move || bytecount::count(&dices_p, 3u8));
-    let dices_p = dices.clone();
-    let fours = thread::spawn(move || bytecount::count(&dices_p, 4u8));
-    let dices_p = dices.clone();
-    let fives = thread::spawn(move || bytecount::count(&dices_p, 5u8));
-    let dices_p = dices.clone();
-    let sixs = thread::spawn(move || bytecount::count(&dices_p, 6u8));
-    Cnt {
-        ones: ones.join().unwrap(),
-        twos: twos.join().unwrap(),
-        threes: threes.join().unwrap(),
-        fours: fours.join().unwrap(),
-        fives: fives.join().unwrap(),
-        sixs: sixs.join().unwrap(),
-    }
+    println!("6 scanns threaded_dice_bytecount {:.1?}", time.elapsed());
 }
 
 fn imp_dice_count(dices: &[u8]) -> Cnt {
@@ -97,6 +64,17 @@ fn imp_dice_count(dices: &[u8]) -> Cnt {
         }
     }
     cnt
+}
+
+fn multi_fun_dice_count(dices: &[u8]) -> Cnt {
+    Cnt {
+        ones: dices.iter().filter(|&x| *x == 1).count(),
+        twos: dices.iter().filter(|&x| *x == 2).count(),
+        threes: dices.iter().filter(|&x| *x == 3).count(),
+        fours: dices.iter().filter(|&x| *x == 4).count(),
+        fives: dices.iter().filter(|&x| *x == 5).count(),
+        sixs: dices.iter().filter(|&x| *x == 6).count(),
+    }
 }
 
 fn fun_dice_count(dices: &[u8]) -> Cnt {
@@ -240,4 +218,38 @@ fn par_fun_dice_count(dices: &[u8]) -> Cnt {
                 }
             },
         )
+}
+
+fn dice_bytecount(dices: &[u8]) -> Cnt {
+    Cnt {
+        ones: bytecount::count(&dices, 1u8),
+        twos: bytecount::count(&dices, 2u8),
+        threes: bytecount::count(&dices, 3u8),
+        fours: bytecount::count(&dices, 4u8),
+        fives: bytecount::count(&dices, 5u8),
+        sixs: bytecount::count(&dices, 6u8),
+    }
+}
+
+fn threaded_dice_bytecount(dices: &Arc<Vec<u8>>) -> Cnt {
+    let dices_p = dices.clone();
+    let ones = thread::spawn(move || bytecount::count(&dices_p, 1u8));
+    let dices_p = dices.clone();
+    let twos = thread::spawn(move || bytecount::count(&dices_p, 2u8));
+    let dices_p = dices.clone();
+    let threes = thread::spawn(move || bytecount::count(&dices_p, 3u8));
+    let dices_p = dices.clone();
+    let fours = thread::spawn(move || bytecount::count(&dices_p, 4u8));
+    let dices_p = dices.clone();
+    let fives = thread::spawn(move || bytecount::count(&dices_p, 5u8));
+    let dices_p = dices.clone();
+    let sixs = thread::spawn(move || bytecount::count(&dices_p, 6u8));
+    Cnt {
+        ones: ones.join().unwrap(),
+        twos: twos.join().unwrap(),
+        threes: threes.join().unwrap(),
+        fours: fours.join().unwrap(),
+        fives: fives.join().unwrap(),
+        sixs: sixs.join().unwrap(),
+    }
 }
