@@ -1,8 +1,6 @@
 use rand::distributions::{Distribution, Uniform};
 use rayon::prelude::*;
-use std::sync::Arc;
-use std::thread;
-use std::time::Instant;
+use std::{sync::Arc, thread, time::Instant};
 #[derive(Debug, Default, Clone)]
 struct Cnt {
     ones: usize,
@@ -58,7 +56,11 @@ fn main() {
     // OS threaded Bytecount crate
     let time = Instant::now();
     let dices = Arc::new(dices);
+    dbg!(threaded_dice_bytecount(&dices));
+    println!("threaded_dice_bytecount {:.1?}", time.elapsed());
+}
 
+fn threaded_dice_bytecount(dices: &Arc<Vec<u8>>) -> Cnt {
     let dices_p = dices.clone();
     let ones = thread::spawn(move || bytecount::count(&dices_p, 1u8));
     let dices_p = dices.clone();
@@ -71,18 +73,14 @@ fn main() {
     let fives = thread::spawn(move || bytecount::count(&dices_p, 5u8));
     let dices_p = dices.clone();
     let sixs = thread::spawn(move || bytecount::count(&dices_p, 6u8));
-
-    let cnt = Cnt {
+    Cnt {
         ones: ones.join().unwrap(),
         twos: twos.join().unwrap(),
         threes: threes.join().unwrap(),
         fours: fours.join().unwrap(),
         fives: fives.join().unwrap(),
         sixs: sixs.join().unwrap(),
-    };
-
-    println!("Threaded:{:?}", cnt);
-    println!("Threaded bytecount {:.1?}", time.elapsed());
+    }
 }
 
 fn imp_dice_count(dices: &[u8]) -> Cnt {
