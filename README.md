@@ -13,6 +13,7 @@ Result, using i5-8250:
     fives: 16662423,
     sixs: 16669982,
 }
+
 Single pass serial imp_dice_count 940.7ms
 
 
@@ -24,6 +25,7 @@ Single pass serial imp_dice_count 940.7ms
     fives: 16662423,
     sixs: 16669982,
 }
+
 Single pass serial fun_dice_count 898.4ms
 
 
@@ -35,6 +37,7 @@ Single pass serial fun_dice_count 898.4ms
     fives: 16662423,
     sixs: 16669982,
 }
+
 Rayon single pass parallell par_fun_dice_count 576.0ms
 [src/main.rs:38] multi_fun_dice_count(&dices) = Cnt {
     ones: 16673061,
@@ -44,6 +47,7 @@ Rayon single pass parallell par_fun_dice_count 576.0ms
     fives: 16662423,
     sixs: 16669982,
 }
+
 6 scanns serial /w SIMD? multi_fun_dice_count 93.6ms
 
 
@@ -55,6 +59,7 @@ Rayon single pass parallell par_fun_dice_count 576.0ms
     fives: 16662423,
     sixs: 16669982,
 }
+
 6 scans serial dice_bytecount 60.5ms
 
 
@@ -66,4 +71,5 @@ Rayon single pass parallell par_fun_dice_count 576.0ms
     fives: 16662423,
     sixs: 16669982,
 }
+
 6 scanns threaded_dice_bytecount 36.7ms
