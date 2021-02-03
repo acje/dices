@@ -36,7 +36,7 @@ fn main() {
     // Multiple scans. Probably uses SIMD?
     let time = Instant::now();
     dbg!(multi_fun_dice_count(&dices));
-    println!("6 scanns serial /w SIMD? multi_fun_dice_count {:.1?}", time.elapsed());
+    println!("6 scans serial /w SIMD? multi_fun_dice_count {:.1?}", time.elapsed());
 
     // Bytecount crate
     let time = Instant::now();
@@ -47,7 +47,7 @@ fn main() {
     let time = Instant::now();
     let dices = Arc::new(dices);
     dbg!(threaded_dice_bytecount(&dices));
-    println!("6 scanns threaded_dice_bytecount {:.1?}", time.elapsed());
+    println!("6 scans threaded_dice_bytecount {:.1?}", time.elapsed());
 }
 
 fn imp_dice_count(dices: &[u8]) -> Cnt {
