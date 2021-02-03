@@ -1,9 +1,19 @@
 # dices
-Rolling dices and counting them
+Rolling 100M D6 dices and counting them
 
 RUSTFLAGS="-C target-cpu=native" cargo run --release
 
 Result, using i5-8250:
+
+Cnt {
+    ones: 16673061,
+    twos: 16666241,
+    threes: 16661574,
+    fours: 16666719,
+    fives: 16662423,
+    sixs: 16669982,
+    }
+
 
 Single pass serial imp_dice_count 940.7ms
 
