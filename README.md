@@ -5,51 +5,57 @@ RUSTFLAGS="-C target-cpu=native" cargo run --release
 
 Result, using i5-8250:
 
-[src/main.rs:25] imp_dice_count(&dices) = Cnt {
-    ones: 16678078,
-    twos: 16661966,
-    threes: 16662117,
-    fours: 16663610,
-    fives: 16667468,
-    sixs: 16666761,
+[src/main.rs:23] imp_dice_count(&dices) = Cnt {
+    ones: 16673061,
+    twos: 16666241,
+    threes: 16661574,
+    fours: 16666719,
+    fives: 16662423,
+    sixs: 16669982,
 }
-imp_dice_count 854.9ms
-
-[src/main.rs:30] fun_dice_count(&dices) = Cnt {
-    ones: 16678078,
-    twos: 16661966,
-    threes: 16662117,
-    fours: 16663610,
-    fives: 16667468,
-    sixs: 16666761,
+Single pass serial imp_dice_count 940.7ms
+[src/main.rs:28] fun_dice_count(&dices) = Cnt {
+    ones: 16673061,
+    twos: 16666241,
+    threes: 16661574,
+    fours: 16666719,
+    fives: 16662423,
+    sixs: 16669982,
 }
-fun_dice_count 875.6ms
-
-[src/main.rs:35] par_fun_dice_count(&dices) = Cnt {
-    ones: 16678078,
-    twos: 16661966,
-    threes: 16662117,
-    fours: 16663610,
-    fives: 16667468,
-    sixs: 16666761,
+Single pass serial fun_dice_count 898.4ms
+[src/main.rs:33] par_fun_dice_count(&dices) = Cnt {
+    ones: 16673061,
+    twos: 16666241,
+    threes: 16661574,
+    fours: 16666719,
+    fives: 16662423,
+    sixs: 16669982,
 }
-par_fun_dice_count 499.5ms
-
-ones: 16678078
-twos: 16661966
-threes: 16662117
-fours: 16663610
-fives: 16667468
-sixs: 16666761
-multiscan fun count 117.3ms
-
-bytecount ones:16678078
-bytecount twos:16661966
-bytecount threes:16662117
-bytecount fours:16663610
-bytecount fives:16667468
-bytecount sixs:16666761
-bytecount 85.0ms
-
-Threaded:Cnt { ones: 16678078, twos: 16661966, threes: 16662117, fours: 16663610, fives: 16667468, sixs: 16666761 }
-Threaded bytecount 38.5ms
+Rayon single pass parallell par_fun_dice_count 576.0ms
+[src/main.rs:38] multi_fun_dice_count(&dices) = Cnt {
+    ones: 16673061,
+    twos: 16666241,
+    threes: 16661574,
+    fours: 16666719,
+    fives: 16662423,
+    sixs: 16669982,
+}
+6 scanns serial /w SIMD? multi_fun_dice_count 93.6ms
+[src/main.rs:43] dice_bytecount(&dices) = Cnt {
+    ones: 16673061,
+    twos: 16666241,
+    threes: 16661574,
+    fours: 16666719,
+    fives: 16662423,
+    sixs: 16669982,
+}
+6 scans serial dice_bytecount 60.5ms
+[src/main.rs:49] threaded_dice_bytecount(&dices) = Cnt {
+    ones: 16673061,
+    twos: 16666241,
+    threes: 16661574,
+    fours: 16666719,
+    fives: 16662423,
+    sixs: 16669982,
+}
+6 scanns threaded_dice_bytecount 36.7ms
