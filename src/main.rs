@@ -245,11 +245,11 @@ fn threaded_dice_bytecount(dices: &Arc<Vec<u8>>) -> Cnt {
     let dices_p = dices.clone();
     let sixs = thread::spawn(move || bytecount::count(&dices_p, 6u8));
     Cnt {
-        ones: ones.join().unwrap(),
-        twos: twos.join().unwrap(),
-        threes: threes.join().unwrap(),
-        fours: fours.join().unwrap(),
-        fives: fives.join().unwrap(),
-        sixs: sixs.join().unwrap(),
+        ones: ones.join().expect("Error counting ones"),
+        twos: twos.join().expect("Error counting twos"),
+        threes: threes.join().expect("Error counting threes"),
+        fours: fours.join().expect("Error counting fours"),
+        fives: fives.join().expect("Error counting fives"),
+        sixs: sixs.join().expect("Error counting sixs"),
     }
 }
