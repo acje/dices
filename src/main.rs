@@ -31,12 +31,18 @@ fn main() {
     // Parallell/rayon functional dice count. Embarrassing code to solve embarrassing parallel problem.
     let time = Instant::now();
     dbg!(par_fun_dice_count(&dices));
-    println!("Rayon single pass parallell par_fun_dice_count {:.1?}", time.elapsed());
+    println!(
+        "Rayon single pass parallell par_fun_dice_count {:.1?}",
+        time.elapsed()
+    );
 
     // Multiple scans. Probably uses SIMD?
     let time = Instant::now();
     dbg!(multi_fun_dice_count(&dices));
-    println!("6 scans serial /w SIMD? multi_fun_dice_count {:.1?}", time.elapsed());
+    println!(
+        "6 scans serial /w SIMD? multi_fun_dice_count {:.1?}",
+        time.elapsed()
+    );
 
     // Bytecount crate
     let time = Instant::now();
