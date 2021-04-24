@@ -40,7 +40,7 @@ fn main() {
     let time = Instant::now();
     dbg!(multi_fun_dice_count(&dices));
     println!(
-        "6 scans serial /w SIMD? multi_fun_dice_count {:.1?}",
+        "6 scans serial (can optimize to SIMD) multi_fun_dice_count {:.1?}",
         time.elapsed()
     );
 
@@ -144,7 +144,7 @@ fn par_fun_dice_count(dices: &[u8]) -> Cnt {
             _ => Cnt::default(),
         })
         .reduce(
-            || Cnt::default(),
+            Cnt::default,
             |cnt, n| -> Cnt {
                 match n {
                     Cnt {
