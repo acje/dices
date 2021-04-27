@@ -3,7 +3,7 @@ Rolling 100M D6 dices and counting them
 
 RUSTFLAGS="-C target-cpu=native" cargo run --release
 
-Result, using i5-8250 (quad core):
+Result, using i5-8250 (quad core, vm):
 
 Single pass serial imp_dice_count 848.6ms
 
@@ -17,7 +17,7 @@ Rayon single pass parallell par_fun_dice_count 549.4ms
 
 6 scans threaded_dice_bytecount 30.5ms
 
-Results, using AMD 5600X (6-core)
+Results, using AMD 5600X (6-core, bare metal)
 
 Single pass serial imp_dice_count 570.8ms
 
