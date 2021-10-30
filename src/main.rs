@@ -228,12 +228,12 @@ fn par_fun_dice_count(dices: &[u8]) -> Cnt {
 
 fn dice_bytecount(dices: &[u8]) -> Cnt {
     Cnt {
-        ones: bytecount::count(&dices, 1u8),
-        twos: bytecount::count(&dices, 2u8),
-        threes: bytecount::count(&dices, 3u8),
-        fours: bytecount::count(&dices, 4u8),
-        fives: bytecount::count(&dices, 5u8),
-        sixs: bytecount::count(&dices, 6u8),
+        ones: bytecount::count(dices, 1u8),
+        twos: bytecount::count(dices, 2u8),
+        threes: bytecount::count(dices, 3u8),
+        fours: bytecount::count(dices, 4u8),
+        fives: bytecount::count(dices, 5u8),
+        sixs: bytecount::count(dices, 6u8),
     }
 }
 
